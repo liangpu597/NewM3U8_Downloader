@@ -7,3 +7,13 @@ E:\Code\VisualStudio\C#\仿照M3U8\obj\Debug\仿照M3U8.Properties.Resources.res
 E:\Code\VisualStudio\C#\仿照M3U8\obj\Debug\仿照M3U8.csproj.GenerateResource.cache
 E:\Code\VisualStudio\C#\仿照M3U8\obj\Debug\仿照M3U8.exe
 E:\Code\VisualStudio\C#\仿照M3U8\obj\Debug\仿照M3U8.pdb
+E:\Code\VisualStudio\C#\仿照M3U8\NewM3U8_Downloader\bin\Debug\仿照M3U8.exe.config
+E:\Code\VisualStudio\C#\仿照M3U8\NewM3U8_Downloader\bin\Debug\仿照M3U8.exe
+E:\Code\VisualStudio\C#\仿照M3U8\NewM3U8_Downloader\bin\Debug\仿照M3U8.pdb
+E:\Code\VisualStudio\C#\仿照M3U8\NewM3U8_Downloader\obj\Debug\仿照M3U8.csprojAssemblyReference.cache
+E:\Code\VisualStudio\C#\仿照M3U8\NewM3U8_Downloader\obj\Debug\仿照M3U8.Properties.Resources.resources
+E:\Code\VisualStudio\C#\仿照M3U8\NewM3U8_Downloader\obj\Debug\仿照M3U8.csproj.GenerateResource.cache
+E:\Code\VisualStudio\C#\仿照M3U8\NewM3U8_Downloader\obj\Debug\仿照M3U8.exe
+E:\Code\VisualStudio\C#\仿照M3U8\NewM3U8_Downloader\obj\Debug\仿照M3U8.pdb
+E:\Code\VisualStudio\C#\仿照M3U8\NewM3U8_Downloader\obj\Debug\仿照M3U8.csproj.CopyComplete
+E:\Code\VisualStudio\C#\仿照M3U8\NewM3U8_Downloader\obj\Debug\仿照M3U8.Form1.resources

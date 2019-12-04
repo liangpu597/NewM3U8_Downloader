@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.label_Process = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -43,17 +44,19 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button_Download = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
-            this.label7 = new System.Windows.Forms.Label();
             this.label_Fenbianlv = new System.Windows.Forms.Label();
             this.label_TotalTime = new System.Windows.Forms.Label();
             this.label_Downloaded = new System.Windows.Forms.Label();
             this.textBox_Information = new System.Windows.Forms.TextBox();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.ProgressBar = new System.Windows.Forms.ProgressBar();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.label11 = new System.Windows.Forms.Label();
+            this.label_DownloadSpeed = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // label1
@@ -236,24 +239,12 @@
             this.button6.Text = "退出";
             this.button6.UseVisualStyleBackColor = false;
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.label7.Location = new System.Drawing.Point(287, 44);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(56, 17);
-            this.label7.TabIndex = 15;
-            this.label7.Text = "信息显示";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // label_Fenbianlv
             // 
             this.label_Fenbianlv.AutoSize = true;
             this.label_Fenbianlv.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label_Fenbianlv.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.label_Fenbianlv.Location = new System.Drawing.Point(403, 44);
+            this.label_Fenbianlv.Location = new System.Drawing.Point(287, 44);
             this.label_Fenbianlv.Name = "label_Fenbianlv";
             this.label_Fenbianlv.Size = new System.Drawing.Size(44, 17);
             this.label_Fenbianlv.TabIndex = 16;
@@ -265,7 +256,7 @@
             this.label_TotalTime.AutoSize = true;
             this.label_TotalTime.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label_TotalTime.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.label_TotalTime.Location = new System.Drawing.Point(562, 44);
+            this.label_TotalTime.Location = new System.Drawing.Point(402, 44);
             this.label_TotalTime.Name = "label_TotalTime";
             this.label_TotalTime.Size = new System.Drawing.Size(44, 17);
             this.label_TotalTime.TabIndex = 17;
@@ -277,7 +268,7 @@
             this.label_Downloaded.AutoSize = true;
             this.label_Downloaded.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label_Downloaded.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.label_Downloaded.Location = new System.Drawing.Point(692, 44);
+            this.label_Downloaded.Location = new System.Drawing.Point(565, 44);
             this.label_Downloaded.Name = "label_Downloaded";
             this.label_Downloaded.Size = new System.Drawing.Size(44, 17);
             this.label_Downloaded.TabIndex = 18;
@@ -297,13 +288,14 @@
             this.textBox_Information.TabIndex = 19;
             this.textBox_Information.TextChanged += new System.EventHandler(this.textBox_Information_TextChanged);
             // 
-            // progressBar1
+            // ProgressBar
             // 
-            this.progressBar1.BackColor = System.Drawing.SystemColors.ControlText;
-            this.progressBar1.Location = new System.Drawing.Point(290, 406);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(591, 23);
-            this.progressBar1.TabIndex = 20;
+            this.ProgressBar.BackColor = System.Drawing.SystemColors.ControlText;
+            this.ProgressBar.Location = new System.Drawing.Point(290, 406);
+            this.ProgressBar.Name = "ProgressBar";
+            this.ProgressBar.Size = new System.Drawing.Size(591, 23);
+            this.ProgressBar.TabIndex = 20;
+            this.ProgressBar.Click += new System.EventHandler(this.ProgressBar_Click);
             // 
             // radioButton1
             // 
@@ -365,23 +357,46 @@
             this.label11.Text = "存储的文件名";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // label_DownloadSpeed
+            // 
+            this.label_DownloadSpeed.AutoSize = true;
+            this.label_DownloadSpeed.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_DownloadSpeed.ForeColor = System.Drawing.Color.Red;
+            this.label_DownloadSpeed.Location = new System.Drawing.Point(739, 44);
+            this.label_DownloadSpeed.Name = "label_DownloadSpeed";
+            this.label_DownloadSpeed.Size = new System.Drawing.Size(32, 17);
+            this.label_DownloadSpeed.TabIndex = 26;
+            this.label_DownloadSpeed.Text = "速度";
+            this.label_DownloadSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label_DownloadSpeed.Click += new System.EventHandler(this.label_DownloadSpeed_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // timer2
+            // 
+            this.timer2.Interval = 1000;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(914, 450);
+            this.Controls.Add(this.label_DownloadSpeed);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.radioButton4);
             this.Controls.Add(this.radioButton3);
             this.Controls.Add(this.radioButton2);
             this.Controls.Add(this.radioButton1);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.ProgressBar);
             this.Controls.Add(this.textBox_Information);
             this.Controls.Add(this.label_Downloaded);
             this.Controls.Add(this.label_TotalTime);
             this.Controls.Add(this.label_Fenbianlv);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button_Download);
             this.Controls.Add(this.button4);
@@ -424,17 +439,19 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button_Download;
         private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label_Fenbianlv;
         private System.Windows.Forms.Label label_TotalTime;
         private System.Windows.Forms.Label label_Downloaded;
         private System.Windows.Forms.TextBox textBox_Information;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar ProgressBar;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.RadioButton radioButton4;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label_DownloadSpeed;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timer2;
     }
 }
 
