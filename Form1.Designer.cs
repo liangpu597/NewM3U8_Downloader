@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
             this.label_Process = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
@@ -57,6 +57,8 @@
             this.label_DownloadSpeed = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.button_About = new System.Windows.Forms.Button();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.SuspendLayout();
             // 
             // label1
@@ -81,17 +83,6 @@
             this.label_Process.TabIndex = 1;
             this.label_Process.Text = "已完成";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(152)))), ((int)(((byte)(219)))));
-            this.label3.Location = new System.Drawing.Point(451, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(58, 21);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "已完成";
-            // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.SystemColors.MenuHighlight;
@@ -105,6 +96,7 @@
             this.button1.TabIndex = 3;
             this.button1.Text = "MIN";
             this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
@@ -135,6 +127,7 @@
             // 
             // textBox_Address
             // 
+            this.textBox_Address.AllowDrop = true;
             this.textBox_Address.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.textBox_Address.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_Address.ForeColor = System.Drawing.Color.White;
@@ -144,6 +137,9 @@
             this.textBox_Address.Size = new System.Drawing.Size(258, 85);
             this.textBox_Address.TabIndex = 6;
             this.textBox_Address.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.textBox_Address.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox_Address_DragDrop);
+            this.textBox_Address.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox_Address_DragEnter);
+            this.textBox_Address.DragOver += new System.Windows.Forms.DragEventHandler(this.textBox_Address_DragOver);
             // 
             // label5
             // 
@@ -203,6 +199,7 @@
             this.button3.TabIndex = 11;
             this.button3.Text = "更改下载路径";
             this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
@@ -238,6 +235,7 @@
             this.button6.TabIndex = 14;
             this.button6.Text = "退出";
             this.button6.UseVisualStyleBackColor = false;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // label_Fenbianlv
             // 
@@ -280,12 +278,13 @@
             // 
             this.textBox_Information.BackColor = System.Drawing.SystemColors.InactiveCaptionText;
             this.textBox_Information.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_Information.ForeColor = System.Drawing.Color.White;
+            this.textBox_Information.ForeColor = System.Drawing.Color.DarkTurquoise;
             this.textBox_Information.Location = new System.Drawing.Point(290, 64);
             this.textBox_Information.Multiline = true;
             this.textBox_Information.Name = "textBox_Information";
             this.textBox_Information.Size = new System.Drawing.Size(591, 336);
             this.textBox_Information.TabIndex = 19;
+            this.textBox_Information.Text = "下载信息在这里进行显示";
             this.textBox_Information.TextChanged += new System.EventHandler(this.textBox_Information_TextChanged);
             // 
             // ProgressBar
@@ -380,12 +379,32 @@
             this.timer2.Interval = 1000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
+            // button_About
+            // 
+            this.button_About.BackColor = System.Drawing.SystemColors.GrayText;
+            this.button_About.FlatAppearance.BorderSize = 0;
+            this.button_About.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_About.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_About.ForeColor = System.Drawing.Color.White;
+            this.button_About.Location = new System.Drawing.Point(696, -4);
+            this.button_About.Name = "button_About";
+            this.button_About.Size = new System.Drawing.Size(75, 23);
+            this.button_About.TabIndex = 27;
+            this.button_About.Text = "About";
+            this.button_About.UseVisualStyleBackColor = false;
+            this.button_About.Click += new System.EventHandler(this.button_About_Click);
+            // 
+            // folderBrowserDialog1
+            // 
+            this.folderBrowserDialog1.HelpRequest += new System.EventHandler(this.folderBrowserDialog1_HelpRequest);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(914, 450);
+            this.Controls.Add(this.button_About);
             this.Controls.Add(this.label_DownloadSpeed);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.radioButton4);
@@ -409,11 +428,12 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label_Process);
             this.Controls.Add(this.label1);
             this.ForeColor = System.Drawing.Color.Black;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -426,7 +446,6 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label_Process;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label4;
@@ -452,6 +471,8 @@
         private System.Windows.Forms.Label label_DownloadSpeed;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.Button button_About;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
     }
 }
 

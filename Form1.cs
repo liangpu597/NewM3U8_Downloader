@@ -16,18 +16,17 @@ using System.Runtime.InteropServices;
 namespace 仿照M3U8
 {
 
-
     //1.定义委托
     public delegate void DelReadStdOutput(string result);
     public delegate void DelReadErrOutput(string result);
     public partial class Form1 : Form
     {
-        Double before = 0, now = 0;
-        private TaskbarManager windowsTaskbar = TaskbarManager.Instance;
+        Double before = 0, now = 0;           //定义两个全局变量 在两个计时器中存储对应的下载文件大小 从而计算出下载速度
+        int ffmpeg = -1;                      //由于是多进程 将当前进程的id给它 到时候关闭的时候可以通过这个杀死对应的进程id
+        private TaskbarManager windowsTaskbar = TaskbarManager.Instance;         //任务栏进度条
         //2.定义委托事件
         public event DelReadStdOutput ReadStdOutput;
         public event DelReadErrOutput ReadErrOutput;
-
         public Form1()
         {
             this.FormBorderStyle = FormBorderStyle.None;
@@ -64,19 +63,21 @@ namespace 仿照M3U8
                     break;
             }
         }
-
-
         private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        {}
         private void button5_Click(object sender, EventArgs e)    //下载按钮
         {
             if (!Directory.Exists(@"download"))              //所有下载的文件都存放在当前目录下的download文件夹
             {
                 Directory.CreateDirectory("download");           //创建download文件夹
             }
+            textBox_Information.Text = "";
+            label_Fenbianlv.Visible = true;
+            label_TotalTime.Visible = true;
+            label_DownloadSpeed.Visible = true;
+            label_Downloaded.Visible = true;
+            label_Process.Visible = true;
+            ProgressBar.Visible = true;
             var currentFilePath = Directory.GetCurrentDirectory() + @"\download";
             string houzhui="";
             if (radioButton1.Checked == true) { houzhui = "flv"; }
@@ -107,10 +108,9 @@ namespace 仿照M3U8
             CmdProcess.Exited += new EventHandler(CmdProcess_Exited);   // 注册进程结束事件
 
             CmdProcess.Start();
+            ffmpeg = CmdProcess.Id;                 //因为是多线程 所以 主线程关了的话可能其他的线程还是没有关闭
             CmdProcess.BeginOutputReadLine();
             CmdProcess.BeginErrorReadLine();
-
-
         }
         private void p_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
@@ -144,9 +144,8 @@ namespace 仿照M3U8
         }
         private void button4_Click(object sender, EventArgs e)
         {
-
+            Process.Start(textBox_Download_Adress.Text);           //打开特定的文件夹
         }
-
         private void Form1_Load(object sender, EventArgs e)
         {
             //首先看看有没有ffmpeg这个程序
@@ -155,34 +154,46 @@ namespace 仿照M3U8
                 MessageBox.Show("在当前tool目录下面没有找到ffmpeg 请加载", "错误显示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Dispose();
                 Application.Exit();
-
             }
             else    //如果文件存在 那么就要获取当前下载路径 并显示
             {
                 textBox_Download_Adress.Text = Directory.GetCurrentDirectory()+@"\download";
             }
+            label_Fenbianlv.Visible = false;
+            label_TotalTime.Visible = false;
+            label_DownloadSpeed.Visible = false;
+            label_Downloaded.Visible = false;
+            label_Process.Visible = false;
+            ProgressBar.Visible = false;  
         }
-
         private void button2_Click(object sender, EventArgs e)
         {
-            Application.Exit();  //只对主线程有效 当有其他线程的时候会失效
+            try {
+                if (Process.GetProcessById(ffmpeg) != null)
+                {
+                    Process.GetProcessById(ffmpeg).Kill();
+                    Dispose();
+                    Application.Exit();
+                }   
+            }
+            catch {   //在杀不死进程的时候 直接强行关闭
+                Dispose();
+                Application.Exit();
+            }
+            //Application.Exit();  //只对主线程有效 当有其他线程的时候会失效
         }
-
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }
-
         private void textBox_Download_Adress_TextChanged(object sender, EventArgs e)
         {
 
         }
-
         private void label10_Click(object sender, EventArgs e)
         {
 
         }
-
         private void textBox_Information_TextChanged(object sender, EventArgs e)
         {
             if (textBox_Information.Lines.GetUpperBound(0) > 5)
@@ -197,8 +208,6 @@ namespace 仿照M3U8
             if (totalTime.Count > 0)
             {
                 var temp1 = totalTime.OfType<Match>().Last().Value.Replace("Duration: ", "");
-
-
                 totalTimes = (Convert.ToDouble(temp1.Substring(0, 2)))*3600+ (Convert.ToDouble(temp1.Substring(3, 2)) )* 60+ (Convert.ToDouble(temp1.Substring(6, 2)))+Convert.ToDouble(temp1.Substring(9, 2))/100;
 
                 label_TotalTime.Text = "总时长: [" + totalTime.OfType<Match>().Last().Value.Replace("Duration: ", "")+" ]";
@@ -226,15 +235,6 @@ namespace 仿照M3U8
                 ProgressBar.Value = Convert.ToInt32(Progress);            //注意 ： 这里 ProgressBar是图中控件的名字而已  但是只要这样写了 系统就可以自动进行调用了 进行自动显示进度条了
                 windowsTaskbar.SetProgressValue(Convert.ToInt32(Progress), 100, this.Handle);       //这样一写 在任务进度栏里面也有了
             }   
-
-            
-
-
-
-            //再加一个下载速度
-
-
-
         }
         private static String FormatFileSize(double filesize)      //此程序最大可以计算到GB 其他的不能再进行计算了
         {
@@ -264,12 +264,8 @@ namespace 仿照M3U8
                 return string.Format("{0:0.00} bytes", filesize);
             }
         }
-
         private void ProgressBar_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        {}
         private void timer1_Tick(object sender, EventArgs e)
         {
             ////label_DownloadSpeed;
@@ -288,15 +284,65 @@ namespace 仿照M3U8
                 //MessageBox.Show(Convert.ToString(now - before));
             }
         }
-
         private void timer2_Tick(object sender, EventArgs e)
         {
             before = now;
         }
-
-        private void label_DownloadSpeed_Click(object sender, EventArgs e)
+        private void button_About_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show("V1.0 BY 蒲良\n2019-11", "关于");
         }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            //if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            //{
+            //    textBox_Download_Adress.Text = openFileDialog1.FileName;
+            //}
+            //FolderBrowserDialog dialog = new FolderBrowserDialog();
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)      //这里必须要先拖一个folderBrowserDialog控件才可以 不可以直接写一个new  注意这里与前面的打开文件夹的不一样
+            {
+                textBox_Download_Adress.Text = folderBrowserDialog1.SelectedPath;
+            }
+        }
+        private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
+        {}
+        private void button6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Process.GetProcessById(ffmpeg) != null)
+                {
+                    Process.GetProcessById(ffmpeg).Kill();
+                    Dispose();
+                    Application.Exit();
+                }
+            }
+            catch
+            {   //在杀不死进程的时候 直接强行关闭
+                Dispose();
+                Application.Exit();
+            }
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+        private void textBox_Address_DragEnter(object sender, DragEventArgs e)        //光这样写还不行 还需要设置textbox的ALLOWDORP = true
+        {
+            e.Effect = DragDropEffects.All;
+        }
+        private void textBox_Address_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.All;
+        }
+        private void textBox_Address_DragDrop(object sender, DragEventArgs e)         //但是经过测试 发现下载的.m3u8文件里面根本没有地址 不但不能播放 而且使用ffmpeg也不能进行下载
+        {
+            var fileNames = (string[])e.Data.GetData(DataFormats.FileDrop);
+            e.Effect = DragDropEffects.All;
+            textBox_Address.Text = fileNames[0];
+        }
+        private void label_DownloadSpeed_Click(object sender, EventArgs e)
+        {}
     }
 }
